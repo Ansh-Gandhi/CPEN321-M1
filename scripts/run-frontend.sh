@@ -70,7 +70,7 @@ fi
 # ---------------------------------------------------------------------------
 
 info "Building and installing app..."
-( cd "$FRONTEND_DIR" && ./gradlew installDebug )
+( cd "$FRONTEND_DIR" && ./gradlew clean installDebug )
 
 APPLICATION_ID="$(grep -E '[[:space:]]applicationId[[:space:]]*=' "$FRONTEND_DIR/app/build.gradle.kts" \
   | head -1 | sed -E 's/.*=[[:space:]]*"([^"]+)".*/\1/')"
