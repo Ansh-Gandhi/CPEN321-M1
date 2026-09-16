@@ -8,6 +8,7 @@ export class PixelRelayService {
   private upstreamWs: WebSocket | null = null;
   private isConnectingUpstream = false;
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  private heartbeatInterval: ReturnType<typeof setInterval> | null = null;
 
   constructor(server: Server) {
     // Set up local WebSocket server attached to HTTP server at /ws/pixels
@@ -16,7 +17,11 @@ export class PixelRelayService {
     this.wss.on('connection', (clientWs) => {
       console.log('[PixelRelay] New Android client connected.');
 
-      // Send initial welcome/status ping if needed
+      // Immediately trigger upstream check if not connected
+      if (!this.upstreamWs || this.upstreamWs.readyState !== WebSocket.OPEN) {
+        this.connectUpstream();
+      }
+
       clientWs.on('close', () => {
         console.log('[PixelRelay] Android client disconnected.');
       });
@@ -26,12 +31,26 @@ export class PixelRelayService {
       });
     });
 
+    // Heartbeat keep-alive timer every 20 seconds to prevent TCP timeouts through cloud firewalls
+    this.heartbeatInterval = setInterval(() => {
+      if (this.upstreamWs?.readyState === WebSocket.OPEN) {
+        this.upstreamWs.ping();
+      }
+      this.wss?.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.ping();
+        }
+      });
+    }, 20000);
+
     // Start connecting to upstream course server
     this.connectUpstream();
   }
 
   private connectUpstream() {
     if (this.isConnectingUpstream) return;
+    if (this.upstreamWs && this.upstreamWs.readyState === WebSocket.OPEN) return;
+
     this.isConnectingUpstream = true;
 
     console.log(`[PixelRelay] Connecting to upstream: ${UPSTREAM_URL}...`);
@@ -89,6 +108,7 @@ export class PixelRelayService {
 
   public close() {
     if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
+    if (this.heartbeatInterval) clearInterval(this.heartbeatInterval);
     this.upstreamWs?.close();
     this.wss?.close();
   }
