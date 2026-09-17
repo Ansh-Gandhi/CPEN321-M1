@@ -40,6 +40,7 @@ import java.util.Locale
 @Composable
 fun TimerTriviaScreen(
     state: TimerTriviaState,
+    onNavigateHome: () -> Unit,
     onMinutesChanged: (String) -> Unit,
     onSecondsChanged: (String) -> Unit,
     onStartTimer: () -> Unit,
@@ -57,6 +58,14 @@ fun TimerTriviaScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        // Back to Main Page Button
+        OutlinedButton(
+            onClick = onNavigateHome,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("← Back to Main Page")
+        }
+
         // Timer Card
         Card(
             modifier = Modifier.fillMaxWidth(),

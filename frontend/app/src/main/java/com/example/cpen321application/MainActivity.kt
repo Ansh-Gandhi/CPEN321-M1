@@ -83,6 +83,7 @@ class MainActivity : ComponentActivity() {
                         AppScreen.SERVER_INFO -> {
                             ServerInfoScreen(
                                 state = button1State,
+                                onNavigateHome = { currentScreen = AppScreen.HOME },
                                 onLogout = {
                                     button1ViewModel.logout()
                                     currentScreen = AppScreen.HOME
@@ -94,6 +95,7 @@ class MainActivity : ComponentActivity() {
                         AppScreen.PIXEL_ART -> {
                             PixelArtScreen(
                                 state = button2State,
+                                onNavigateHome = { currentScreen = AppScreen.HOME },
                                 onScreenOpened = { button2ViewModel.onScreenOpened() },
                                 onScreenClosed = { button2ViewModel.onScreenClosed() },
                                 onRetryConnection = { button2ViewModel.retryConnection() },
@@ -105,6 +107,7 @@ class MainActivity : ComponentActivity() {
                         AppScreen.TIMER_TRIVIA -> {
                             TimerTriviaScreen(
                                 state = button3State,
+                                onNavigateHome = { currentScreen = AppScreen.HOME },
                                 onMinutesChanged = { button3ViewModel.setMinutesInput(it) },
                                 onSecondsChanged = { button3ViewModel.setSecondsInput(it) },
                                 onStartTimer = { button3ViewModel.startTimer() },

@@ -18,6 +18,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ServerInfoScreen(
     state: Button1State,
+    onNavigateHome: () -> Unit,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -55,6 +57,14 @@ fun ServerInfoScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        // Back to Main Page Button
+        OutlinedButton(
+            onClick = onNavigateHome,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("← Back to Main Page")
+        }
+
         // Logged-in Google User Card
         Card(
             modifier = Modifier.fillMaxWidth(),

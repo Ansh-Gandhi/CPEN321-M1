@@ -36,6 +36,7 @@ import com.example.cpen321application.network.WebSocketStatus
 @Composable
 fun PixelArtScreen(
     state: PixelArtState,
+    onNavigateHome: () -> Unit,
     onScreenOpened: () -> Unit,
     onScreenClosed: () -> Unit,
     onRetryConnection: () -> Unit,
@@ -57,6 +58,14 @@ fun PixelArtScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        // Back to Main Page Button
+        OutlinedButton(
+            onClick = onNavigateHome,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("← Back to Main Page")
+        }
+
         // Status Card
         Card(
             modifier = Modifier.fillMaxWidth(),
